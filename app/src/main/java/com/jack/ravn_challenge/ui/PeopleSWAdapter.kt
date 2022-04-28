@@ -13,15 +13,14 @@ import com.jack.ravn_challenge.data.model.PersonModel
 import com.jack.ravn_challenge.databinding.ItemPeopleBinding
 
 class PeopleSWAdapter(private val context: Context,
-                      private val peopleList:MutableList<GetAllPeopleQuery.Person>,
                       private val itemClickListener: OnItemClickListener
                       ):RecyclerView.Adapter<PeopleSWAdapter.ViewHolder>() {
 
     var onEndOfListReached: (() -> Unit)? = null
-    //val peopleList:MutableList<PersonModel> = mutableListOf()
+    val peopleList:MutableList<PersonModel> = mutableListOf()
 
     fun setList(newList: MutableList<PersonModel>){
-        //peopleList.addAll(newList)
+        peopleList.addAll(newList)
         notifyDataSetChanged()
     }
 
@@ -31,7 +30,7 @@ class PeopleSWAdapter(private val context: Context,
     }
 
     interface OnItemClickListener{
-        fun onPersonClick(person:GetAllPeopleQuery.Person)
+        fun onPersonClick(person:PersonModel)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

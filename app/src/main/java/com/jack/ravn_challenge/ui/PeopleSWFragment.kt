@@ -34,7 +34,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
     private var _binding:FragmentPeopleSWBinding? = null
     private val binding get() = _binding!!
 
-    //private val peopleSWAdapter by lazy { PeopleSWAdapter(requireContext()) }
+    private val peopleSWAdapter by lazy { PeopleSWAdapter(requireContext(),this) }
 
     private val peopleViewModel: MainViewModel by viewModels()
 
@@ -54,68 +54,23 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val people = mutableListOf<GetAllPeopleQuery.Person>()
-        val adapter = PeopleSWAdapter(requireContext(),people,this)
-        binding.rvPeople.adapter = adapter
+
+        list = mutableListOf()
+
+        val count = 5
+
+        peopleViewModel.onCreate("",count)
 
         initRecyclerView()
-        val apolloClient = GraphQLInstance.get()
 
-        val channel = Channel<Unit>(Channel.CONFLATED)
-
-        // Send a first item to do the initial load else the list will stay empty forever
-        channel.trySend(Unit)
-        adapter.onEndOfListReached = {
-            channel.trySend(Unit)
-        }
-
-        lifecycleScope.launchWhenResumed {
-
-            binding.refresh.visibility = View.GONE
-            binding.progressBar.visibility = View.VISIBLE
-            binding.error.visibility = View.GONE
-
-            var cursor:String? = null
-            for (item in channel){
-
-                val response = try {
-                    apolloClient.query(GetAllPeopleQuery(cursor = Optional.presentIfNotNull(cursor),count = Optional.presentIfNotNull(5))).execute()
-                }catch (e: ApolloException){
-                    binding.progressBar.visibility = View.GONE
-                    binding.error.visibility = View.VISIBLE
-                    return@launchWhenResumed
-                }
-                Handler().postDelayed(Runnable {
-                    val newpeople = response.data?.allPeople?.people?.filterNotNull()
-                    if (newpeople != null){
-                        binding.refresh.visibility = View.VISIBLE
-                        people.addAll(newpeople)
-                        Log.d("newpeople","$newpeople")
-                        Log.d("people","$people")
-                        adapter.notifyDataSetChanged()
-                    }
-                    cursor = response.data?.allPeople?.pageInfo?.endCursor
-
-
-                    binding.refresh.setOnRefreshListener{
-                        Handler().postDelayed(Runnable {
-                            binding.refresh.isRefreshing = false
-                        }, 1000)
-                    }
-                }, 2000)
-                if (response.data?.allPeople?.pageInfo?.hasNextPage!= true){
-                    binding.progressBar.visibility = View.GONE
-                    break
-                }
-            }
-        }
+        setupObserver(count)
     }
 
     private fun initRecyclerView(){
         binding.rvPeople.apply {
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(DividerItemDecoration(requireContext(),DividerItemDecoration.VERTICAL))
-
+            adapter = peopleSWAdapter
         }
     }
 
@@ -135,10 +90,11 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                     val personList = (allPeople.data.people!! as MutableList<PersonModel>)
 
                     Log.d("people","$personList")
+                    Log.d("people","${allPeople.data.pageInfo?.endCursor}")
 
                     list.addAll(personList)
 
-//                    peopleSWAdapter.setList(personList)
+                    peopleSWAdapter.setList(personList)
 
                     if (allPeople.data.pageInfo?.hasNextPage!!){
                         peopleViewModel.onCreate(allPeople.data.pageInfo?.endCursor!!,count)
@@ -154,8 +110,8 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
         })
     }
 
-    override fun onPersonClick(person: GetAllPeopleQuery.Person) {
-        val action = PeopleSWFragmentDirections.actionPeopleSWFragmentToPersonFragment(person.name!!,person.id)
+    override fun onPersonClick(person: PersonModel) {
+        val action = PeopleSWFragmentDirections.actionPeopleSWFragmentToPersonFragment(person.name!!,person.id!!)
         findNavController().navigate(action)
     }
 
