@@ -15,7 +15,7 @@ class ApolloServiceImpl:ApolloService {
     private val apolloClient = GraphQLInstance.get()
 
 
-    override suspend fun getAllPeople(cursor: String, count: Int): Resource<AllPeople> {
+    override suspend fun getAllPeople(cursor: String, count: Int): AllPeople {
 
         val response = getQuery(cursor,count)
 
@@ -25,7 +25,7 @@ class ApolloServiceImpl:ApolloService {
 
         val allPeople = AllPeople(personList,pageInfo)
 
-        return Resource.Success(allPeople)
+        return allPeople
     }
 
     suspend fun getQuery(cursor:String, count:Int):ApolloResponse<GetAllPeopleQuery.Data>{

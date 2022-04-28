@@ -1,5 +1,6 @@
 package com.jack.ravn_challenge.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -18,17 +19,29 @@ import kotlinx.coroutines.launch
 
 class MainViewModel:ViewModel() {
 
-    val peopleModel = MutableLiveData<Resource<AllPeople>>()
+    val peopleModel = MutableLiveData<Resource<AllPeople?>>()
 
     var getPeopleUseCase = GetPeopleUseCase()
 
     fun onCreate(cursor:String,count:Int) {
 
+        var newcursor =cursor
+        var result:AllPeople
+
+
         viewModelScope.launch {
             peopleModel.postValue(Resource.Loading)
             try {
-                val result =  getPeopleUseCase(cursor,count)
-                peopleModel.postValue(result)
+                while (true){
+                    result =  getPeopleUseCase(newcursor,count)
+                    peopleModel.postValue(Resource.Success(result!!))
+
+                    if (!result!!.pageInfo?.hasNextPage!!){
+                        break
+                    }else{
+                        newcursor = result!!.pageInfo?.endCursor!!
+                    }
+                }
             }catch (e:ApolloException){
                 peopleModel.postValue(Resource.Failure(e))
             }

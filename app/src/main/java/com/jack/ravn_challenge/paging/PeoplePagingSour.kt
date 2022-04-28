@@ -22,11 +22,11 @@ companion object{
             val response = getPeopleUseCase(nextPage,COUNT)
             var nextPageCursor:String = ""
             var result:AllPeople? = null
-            when(response){
+            /*when(response){
                 is Resource.Success->{
                     result = response.data
                 }
-            }
+            }*/
             val prevPageCursor = nextPage
             if (result?.pageInfo?.hasNextPage!!){
                 nextPageCursor = result?.pageInfo?.endCursor!!

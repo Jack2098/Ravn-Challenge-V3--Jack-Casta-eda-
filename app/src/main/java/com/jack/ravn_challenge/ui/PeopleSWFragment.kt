@@ -59,11 +59,22 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
         val count = 5
 
-        peopleViewModel.onCreate("",count)
 
         initRecyclerView()
 
+        Log.d("people","asas------")
         setupObserver(count)
+
+        binding.refresh.setOnRefreshListener {
+            peopleSWAdapter.removeList()
+            peopleViewModel.peopleModel.value=Resource.Success(null)
+            peopleViewModel.peopleModel.removeObservers(viewLifecycleOwner)
+
+            setupObserver(count)
+
+            binding.refresh.isRefreshing = false
+        }
+
     }
 
     private fun initRecyclerView(){
@@ -77,6 +88,9 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
 
     fun setupObserver(count:Int){
+
+        peopleViewModel.onCreate("",count)
+
         peopleViewModel.peopleModel.observe(viewLifecycleOwner, Observer {  allPeople->
             when(allPeople){
                 is Resource.Loading->{
@@ -87,22 +101,16 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                     binding.refresh.visibility = View.VISIBLE
                     binding.progressBar.visibility = View.GONE
                     //Log.d("people","${allPeople.data.people}")
-                    val personList = (allPeople.data.people!! as MutableList<PersonModel>)
+                    Log.d("people","$allPeople")
+                    if (allPeople.data != null){
+                        val personList = (allPeople.data?.people!!)
 
-                    Log.d("people","$personList")
-                    Log.d("people","${allPeople.data.pageInfo?.endCursor}")
+                        //Log.d("people","$personList")
 
-                    list.addAll(personList)
-
-                    peopleSWAdapter.setList(personList)
-
-                    if (allPeople.data.pageInfo?.hasNextPage!!){
-                        peopleViewModel.onCreate(allPeople.data.pageInfo?.endCursor!!,count)
+                        peopleSWAdapter.setList(personList as MutableList<PersonModel>)
                     }
-
                 }
                 is Resource.Failure->{
-                    binding.refresh.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.error.visibility = View.VISIBLE
                 }

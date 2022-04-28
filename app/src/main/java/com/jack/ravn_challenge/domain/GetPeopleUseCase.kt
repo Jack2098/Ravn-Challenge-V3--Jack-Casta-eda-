@@ -9,7 +9,7 @@ class GetPeopleUseCase {
 
     private val repository = PeopleRepository()
 
-    suspend operator fun invoke(cursor:String,count:Int): Resource<AllPeople>{
+    suspend operator fun invoke(cursor:String,count:Int): AllPeople{
         return repository.getAllPeople(cursor,count)
     }
 }
