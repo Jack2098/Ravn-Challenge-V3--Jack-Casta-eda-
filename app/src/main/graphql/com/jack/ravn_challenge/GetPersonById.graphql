@@ -5,6 +5,7 @@ query GetPersonById($id:ID){
         birthYear
         eyeColor
         hairColor
+        skinColor
         homeworld{
             name
         }

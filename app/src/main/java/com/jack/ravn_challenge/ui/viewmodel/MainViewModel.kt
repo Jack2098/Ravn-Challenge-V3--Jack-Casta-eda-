@@ -4,17 +4,22 @@ import androidx.lifecycle.*
 import com.apollographql.apollo3.exception.ApolloException
 import com.jack.ravn_challenge.core.GraphQLInstance
 import com.jack.ravn_challenge.data.model.AllPeople
-import com.jack.ravn_challenge.domain.GetPeopleUseCase
+import com.jack.ravn_challenge.data.model.PersonModel
+import com.jack.ravn_challenge.domain.usecase.GetPeopleUseCase
+import com.jack.ravn_challenge.domain.usecase.GetPersonUseCase
 import com.jack.ravn_challenge.vo.Resource
 import kotlinx.coroutines.launch
 
 class MainViewModel:ViewModel() {
 
     val peopleModel = MutableLiveData<Resource<AllPeople?>>()
+    val personModel = MutableLiveData<Resource<PersonModel>>()
 
     var getPeopleUseCase = GetPeopleUseCase()
 
-    fun onCreate(cursor:String,count:Int) {
+    var getPersonUseCase = GetPersonUseCase()
+
+    fun getAllPeople(cursor:String, count:Int) {
 
         var newcursor =cursor
         var result:AllPeople
@@ -36,6 +41,18 @@ class MainViewModel:ViewModel() {
                 }
             }catch (e:ApolloException){
                 peopleModel.postValue(Resource.Failure(e))
+            }
+        }
+    }
+
+    fun getPerson(id:String){
+        viewModelScope.launch {
+            personModel.postValue(Resource.Loading)
+            try {
+                val  response  = getPersonUseCase(id)
+                personModel.postValue(Resource.Success(response))
+            }catch (e:ApolloException){
+                personModel.postValue(Resource.Failure(e))
             }
         }
     }

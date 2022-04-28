@@ -1,9 +1,7 @@
-package com.jack.ravn_challenge.domain
+package com.jack.ravn_challenge.domain.usecase
 
 import com.jack.ravn_challenge.data.PeopleRepository
 import com.jack.ravn_challenge.data.model.AllPeople
-import com.jack.ravn_challenge.data.model.PersonModel
-import com.jack.ravn_challenge.vo.Resource
 
 class GetPeopleUseCase {
 

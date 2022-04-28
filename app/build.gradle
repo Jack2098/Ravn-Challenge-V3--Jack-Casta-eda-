@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs.kotlin'
     id("com.apollographql.apollo3").version("3.2.1")
+    id 'kotlin-kapt'
 }
 
 android {

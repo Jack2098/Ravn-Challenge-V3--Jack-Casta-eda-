@@ -75,7 +75,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
 
     fun setupObserver(count:Int){
-        peopleViewModel.onCreate("",count)
+        peopleViewModel.getAllPeople("",count)
 
         peopleViewModel.peopleModel.observe(viewLifecycleOwner, Observer {  allPeople->
             when(allPeople){

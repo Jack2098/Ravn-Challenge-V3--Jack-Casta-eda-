@@ -7,6 +7,7 @@ data class PersonModel(
     val birthYear: String? = null,
     val eyeColor: String? = null,
     val hairColor:String? = null,
+    val skinColor:String? = null,
     val homeworld: HomeworldModel? = null,
     val species: SpeciesModel? = null,
     val vehicleConnection: VehicleConnection? = null

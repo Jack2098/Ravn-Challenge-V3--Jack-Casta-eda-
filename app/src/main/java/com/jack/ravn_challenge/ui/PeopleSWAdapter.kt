@@ -34,12 +34,12 @@ class PeopleSWAdapter(private val context: Context,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var inflater:View = LayoutInflater.from(context).inflate(R.layout.item_people,parent,false)
+        val inflater:View = LayoutInflater.from(context).inflate(R.layout.item_people,parent,false)
         return ViewHolder(inflater)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val person = peopleList.get(position)
+        val person = peopleList[position]
         holder.binding.peopleName.text = person.name
         val species:String? = person.species?.name
         val homeworl:String = person.homeworld?.name!!
