@@ -1,6 +1,7 @@
 package com.jack.ravn_challenge.data.network
 
 import com.jack.ravn_challenge.data.model.AllPeople
+import com.jack.ravn_challenge.data.model.PersonModel
 import com.jack.ravn_challenge.vo.Resource
 
 

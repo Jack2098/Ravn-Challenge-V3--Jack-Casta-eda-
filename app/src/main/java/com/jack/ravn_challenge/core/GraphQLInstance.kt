@@ -23,7 +23,6 @@ object GraphQLInstance {
     fun get(): ApolloClient {
         return ApolloClient.Builder()
             .serverUrl(BASE_URL)
-            .okHttpClient(httpClient)
             .build()
     }
 }

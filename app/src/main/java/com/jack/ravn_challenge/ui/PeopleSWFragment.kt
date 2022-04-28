@@ -1,7 +1,6 @@
 package com.jack.ravn_challenge.ui
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,25 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.apollographql.apollo3.api.Optional
-import com.apollographql.apollo3.exception.ApolloException
-import com.jack.ravn_challenge.GetAllPeopleQuery
-import com.jack.ravn_challenge.core.GraphQLInstance
-import com.jack.ravn_challenge.data.model.PageInfoModel
 import com.jack.ravn_challenge.databinding.FragmentPeopleSWBinding
 import com.jack.ravn_challenge.data.model.PersonModel
 import com.jack.ravn_challenge.ui.viewmodel.MainViewModel
-import com.jack.ravn_challenge.ui.viewmodel.PruebaAdapter
 import com.jack.ravn_challenge.vo.Resource
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
@@ -67,8 +54,8 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
         binding.refresh.setOnRefreshListener {
             peopleSWAdapter.removeList()
-            peopleViewModel.peopleModel.value=Resource.Success(null)
             peopleViewModel.peopleModel.removeObservers(viewLifecycleOwner)
+            peopleViewModel.peopleModel.value=Resource.Success(null)
 
             setupObserver(count)
 
@@ -88,7 +75,6 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
 
     fun setupObserver(count:Int){
-
         peopleViewModel.onCreate("",count)
 
         peopleViewModel.peopleModel.observe(viewLifecycleOwner, Observer {  allPeople->
@@ -96,12 +82,13 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                 is Resource.Loading->{
                     binding.rvPeople.visibility = View.GONE
                     binding.error.visibility = View.GONE
+                    binding.progressBar.visibility = View.VISIBLE
                 }
                 is Resource.Success->{
                     binding.rvPeople.visibility = View.VISIBLE
                     binding.error.visibility = View.GONE
                     //Log.d("people","${allPeople.data.people}")
-                    Log.d("people","$allPeople")
+                    Log.d("people","${allPeople.data}")
                     if (allPeople.data != null){
 
                         val personList = (allPeople.data?.people!!)
