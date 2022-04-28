@@ -94,23 +94,23 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
         peopleViewModel.peopleModel.observe(viewLifecycleOwner, Observer {  allPeople->
             when(allPeople){
                 is Resource.Loading->{
-                    binding.refresh.visibility = View.GONE
+                    binding.rvPeople.visibility = View.GONE
                     binding.error.visibility = View.GONE
                 }
                 is Resource.Success->{
-                    binding.refresh.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
+                    binding.rvPeople.visibility = View.VISIBLE
+                    binding.error.visibility = View.GONE
                     //Log.d("people","${allPeople.data.people}")
                     Log.d("people","$allPeople")
                     if (allPeople.data != null){
-                        val personList = (allPeople.data?.people!!)
 
-                        //Log.d("people","$personList")
+                        val personList = (allPeople.data?.people!!)
 
                         peopleSWAdapter.setList(personList as MutableList<PersonModel>)
                     }
                 }
                 is Resource.Failure->{
+                    binding.rvPeople.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.error.visibility = View.VISIBLE
                 }
