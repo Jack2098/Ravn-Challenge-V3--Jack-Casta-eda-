@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.PersonFragment">
+
+    <LinearLayout
+        android:id="@+id/detail_person"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_information"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_dark"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:layout_marginTop="7dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/eye_color"
+                android:textSize="17sp"
+                android:textColor="@color/text_light"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/eye_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/eye_color"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="17sp"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hair_color"
+                android:textSize="17sp"
+                android:textColor="@color/text_light"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/hair_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/eye_color"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="17sp"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/skin_color"
+                android:textSize="17sp"
+                android:textColor="@color/text_light"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/skin_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/eye_color"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="17sp"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="49dp"
+            android:paddingHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/birth_year"
+                android:textSize="17sp"
+                android:textColor="@color/text_light"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/birth_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/eye_color"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:textSize="17sp"
+                android:textColor="@color/text_dark"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/vehicle"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_marginTop="32dp"
+                android:layout_marginStart="16dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_vehicle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/prograss_bar"
+        style="@android:style/Widget.ProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

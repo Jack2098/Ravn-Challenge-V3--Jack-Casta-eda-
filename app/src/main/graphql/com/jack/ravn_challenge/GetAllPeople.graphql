@@ -1,0 +1,26 @@
+query GetAllPeople($cursor:String,$count:Int){
+    allPeople(after: $cursor,first: $count){
+        people {
+            id
+            name
+            birthYear
+            eyeColor
+            hairColor
+            homeworld{
+                name
+            }
+            species{
+                name
+            }
+            vehicleConnection{
+                vehicles{
+                    name
+                }
+            }
+        }
+        pageInfo{
+            endCursor
+            hasNextPage
+        }
+    }
+}

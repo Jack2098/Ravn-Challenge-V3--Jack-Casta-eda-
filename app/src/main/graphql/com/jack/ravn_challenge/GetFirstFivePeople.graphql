@@ -1,0 +1,21 @@
+query GetFirstFivePeople($cursor:String,$count:Int){
+    allPeople(after: $cursor,first: $count){
+        people {
+            name
+            birthYear
+            eyeColor
+            hairColor
+            homeworld{
+                name
+            }
+            species{
+                name
+            }
+            vehicleConnection{
+                vehicles{
+                    name
+                }
+            }
+        }
+    }
+}
