@@ -59,6 +59,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener,SearchVi
             peopleViewModel.peopleModel.value=Resource.Success(null)
 
             setupObserver()
+            binding.searchPerson.visibility = View.GONE
 
             binding.refresh.isRefreshing = false
         }
@@ -87,7 +88,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener,SearchVi
                 findNavController().navigate(action)
                 return true
             }
-            R.id.search->{
+            /*R.id.search->{
                 if(flagSearch){
                     binding.searchPerson.visibility = View.VISIBLE
                     flagSearch = false
@@ -96,7 +97,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener,SearchVi
                     flagSearch = true
                 }
                 return true
-            }
+            }*/
             else->super.onOptionsItemSelected(item)
         }
     }
@@ -123,6 +124,7 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener,SearchVi
 
                         if(!allPeople.data.pageInfo?.hasNextPage!!){
                             binding.progressBar.visibility = View.GONE
+                            binding.searchPerson.visibility = View.VISIBLE
                         }
                     }
                 }

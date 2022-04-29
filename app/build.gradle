@@ -82,6 +82,9 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.36"
     kapt "com.google.dagger:hilt-android-compiler:2.36"
 
+    //Mockko
+    testImplementation "io.mockk:mockk:1.12.2"
+
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
