@@ -1,5 +1,8 @@
 # Ravn-Challenge-V3--Jack-Casta-eda
 
+# Install Project
+Download the project and run it in android studio
+
 # Description
 The purpose of this project is to consume an api (https://swapi-graphql.netlify.app/.netlify/functions/index) that contains the information of the Star Wars characters. This project has been designed in the kotlin language for Android platforms. The project uses the MVVM pattern that tries to decouple the user interface from the application logic.
 
