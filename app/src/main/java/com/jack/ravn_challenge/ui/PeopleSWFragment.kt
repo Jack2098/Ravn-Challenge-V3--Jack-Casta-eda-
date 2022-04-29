@@ -1,8 +1,10 @@
 package com.jack.ravn_challenge.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import androidx.core.content.ContextCompat
+import android.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -16,7 +18,7 @@ import com.jack.ravn_challenge.vo.Resource
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
+class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener,SearchView.OnQueryTextListener {
 
     private var _binding:FragmentPeopleSWBinding? = null
     private val binding get() = _binding!!
@@ -26,6 +28,8 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
     private val peopleViewModel: MainViewModel by viewModels()
 
     private lateinit var list:MutableList<PersonModel>
+
+    private var flagSearch = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,21 +49,21 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
         list = mutableListOf()
 
-        val count = 5
-
 
         initRecyclerView()
-        setupObserver(count)
+        setupObserver()
 
         binding.refresh.setOnRefreshListener {
             peopleSWAdapter.removeList()
             peopleViewModel.peopleModel.removeObservers(viewLifecycleOwner)
             peopleViewModel.peopleModel.value=Resource.Success(null)
 
-            setupObserver(count)
+            setupObserver()
 
             binding.refresh.isRefreshing = false
         }
+
+        binding.searchPerson.setOnQueryTextListener(this)
 
     }
 
@@ -73,7 +77,6 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_favorite,menu)
-        ContextCompat.getDrawable(this.requireContext(),R.drawable.favorite)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -84,11 +87,22 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                 findNavController().navigate(action)
                 return true
             }
+            R.id.search->{
+                if(flagSearch){
+                    binding.searchPerson.visibility = View.VISIBLE
+                    flagSearch = false
+                }else{
+                    binding.searchPerson.visibility = View.GONE
+                    flagSearch = true
+                }
+                return true
+            }
             else->super.onOptionsItemSelected(item)
         }
     }
 
-    private fun setupObserver(count:Int){
+    private fun setupObserver(){
+        val count = 5
         peopleViewModel.getAllPeople("",count)
 
         peopleViewModel.peopleModel.observe(viewLifecycleOwner, {  allPeople->
@@ -106,6 +120,10 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                         val personList = (allPeople.data.people!!)
 
                         peopleSWAdapter.setList(personList as MutableList<PersonModel>)
+
+                        if(!allPeople.data.pageInfo?.hasNextPage!!){
+                            binding.progressBar.visibility = View.GONE
+                        }
                     }
                 }
                 is Resource.Failure->{
@@ -126,60 +144,12 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
         _binding = null
     }
 
-    /*fun getData(){
-        val people = mutableListOf<GetAllPeopleQuery.Person>()
-        adapter = PeopleSWAdapter(requireContext(),people)
-        binding.rvPeople.adapter = adapter
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
 
-        val apolloClient = GraphQLInstance.get()
-
-        val channel = Channel<Unit>(Channel.CONFLATED)
-
-        // Send a first item to do the initial load else the list will stay empty forever
-        channel.trySend(Unit)
-        adapter.onEndOfListReached = {
-            channel.trySend(Unit)
-        }
-
-        lifecycleScope.launchWhenResumed {
-
-            binding.refresh.visibility = View.GONE
-            binding.progressBar.visibility = View.VISIBLE
-            binding.error.visibility = View.GONE
-
-            var cursor:String? = null
-            for (item in channel){
-
-                val response = try {
-                    apolloClient.query(GetAllPeopleQuery(cursor = Optional.presentIfNotNull(cursor),count = Optional.presentIfNotNull(5))).execute()
-                }catch (e:ApolloException){
-                    binding.progressBar.visibility = View.GONE
-                    binding.error.visibility = View.VISIBLE
-                    return@launchWhenResumed
-                }
-                Handler().postDelayed(Runnable {
-                    val newpeople = response.data?.allPeople?.people?.filterNotNull()
-                    if (newpeople != null){
-                        binding.refresh.visibility = View.VISIBLE
-                        people.addAll(newpeople)
-                        Log.d("newpeople","$newpeople")
-                        Log.d("people","$people")
-                        adapter.notifyDataSetChanged()
-                    }
-                    cursor = response.data?.allPeople?.pageInfo?.endCursor
-
-
-                    binding.refresh.setOnRefreshListener{
-                        Handler().postDelayed(Runnable {
-                            binding.refresh.isRefreshing = false
-                        }, 1000)
-                    }
-                }, 2000)
-                if (response.data?.allPeople?.pageInfo?.hasNextPage!= true){
-                    binding.progressBar.visibility = View.GONE
-                    break
-                }
-            }
-        }
-    }*/
+    override fun onQueryTextChange(newText: String?): Boolean {
+        peopleSWAdapter.fiterPerson(newText)
+        return false
+    }
 }
