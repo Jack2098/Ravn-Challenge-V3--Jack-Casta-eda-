@@ -1,10 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'androidx.navigation.safeargs.kotlin'
     id("com.apollographql.apollo3").version("3.2.1")
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -50,6 +50,7 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
     implementation "androidx.navigation:navigation-ui-ktx:2.4.2"
 
+    //Apollo
     implementation("com.apollographql.apollo3:apollo-runtime:3.2.1")
     implementation 'com.apollographql.apollo:apollo-android-support:1.0.0'
 
@@ -72,9 +73,14 @@ dependencies {
     //Swiperefreshlayout
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Paging 3
-    implementation "androidx.paging:paging-runtime:3.1.1"
+    // Room
+    implementation 'androidx.room:room-ktx:2.4.2'
+    implementation "androidx.room:room-runtime:2.4.2"
+    kapt "androidx.room:room-compiler:2.4.2"
 
+    //Dagger Hilt
+    implementation "com.google.dagger:hilt-android:2.36"
+    kapt "com.google.dagger:hilt-android-compiler:2.36"
 
 
     testImplementation 'junit:junit:4.+'

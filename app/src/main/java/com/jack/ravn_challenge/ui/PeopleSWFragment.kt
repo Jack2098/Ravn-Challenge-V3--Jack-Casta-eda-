@@ -1,21 +1,21 @@
 package com.jack.ravn_challenge.ui
 
 import android.os.Bundle
-import android.util.Log
+import android.view.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jack.ravn_challenge.R
 import com.jack.ravn_challenge.databinding.FragmentPeopleSWBinding
 import com.jack.ravn_challenge.data.model.PersonModel
 import com.jack.ravn_challenge.ui.viewmodel.MainViewModel
 import com.jack.ravn_challenge.vo.Resource
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
     private var _binding:FragmentPeopleSWBinding? = null
@@ -30,12 +30,13 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPeopleSWBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -48,8 +49,6 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
 
 
         initRecyclerView()
-
-        Log.d("people","asas------")
         setupObserver(count)
 
         binding.refresh.setOnRefreshListener {
@@ -72,12 +71,27 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_favorite,menu)
+        ContextCompat.getDrawable(this.requireContext(),R.drawable.favorite)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.favorite->{
+                val action = PeopleSWFragmentDirections.actionPeopleSWFragmentToFavoriteFragment()
+                findNavController().navigate(action)
+                return true
+            }
+            else->super.onOptionsItemSelected(item)
+        }
+    }
 
-    fun setupObserver(count:Int){
+    private fun setupObserver(count:Int){
         peopleViewModel.getAllPeople("",count)
 
-        peopleViewModel.peopleModel.observe(viewLifecycleOwner, Observer {  allPeople->
+        peopleViewModel.peopleModel.observe(viewLifecycleOwner, {  allPeople->
             when(allPeople){
                 is Resource.Loading->{
                     binding.rvPeople.visibility = View.GONE
@@ -87,11 +101,9 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
                 is Resource.Success->{
                     binding.rvPeople.visibility = View.VISIBLE
                     binding.error.visibility = View.GONE
-                    //Log.d("people","${allPeople.data.people}")
-                    Log.d("people","${allPeople.data}")
                     if (allPeople.data != null){
 
-                        val personList = (allPeople.data?.people!!)
+                        val personList = (allPeople.data.people!!)
 
                         peopleSWAdapter.setList(personList as MutableList<PersonModel>)
                     }
@@ -108,6 +120,10 @@ class PeopleSWFragment : Fragment(),PeopleSWAdapter.OnItemClickListener {
     override fun onPersonClick(person: PersonModel) {
         val action = PeopleSWFragmentDirections.actionPeopleSWFragmentToPersonFragment(person.name!!,person.id!!)
         findNavController().navigate(action)
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     /*fun getData(){

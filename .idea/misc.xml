@@ -4,7 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/drawable/back_ground.xml" value="0.26205128205128203" />
+        <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/drawable/favorite.xml" value="0.26614583333333336" />
         <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/activity_main.xml" value="0.12708333333333333" />
+        <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/fragment_detail_favorite.xml" value="0.14814814814814814" />
+        <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/fragment_favorite.xml" value="0.1" />
         <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/fragment_people.xml" value="0.1" />
         <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/fragment_people_s_w.xml" value="0.176" />
         <entry key="..\:/Users/JACK/Desktop/Curso de Kotlin/RavnChallenge/app/src/main/res/layout/fragment_person.xml" value="0.25" />

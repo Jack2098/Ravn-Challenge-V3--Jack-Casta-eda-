@@ -1,4 +1,4 @@
-package com.jack.ravn_challenge.ui
+package com.jack.ravn_challenge.ui.person
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ class VehicleAdapter(private val context: Context):RecyclerView.Adapter<VehicleA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val vehicle = vehicleList[position]
-        holder.binding.vehicleName.text = vehicle.name
+        holder.binding.vehicleName.text = vehicle.nameVM
     }
 
     override fun getItemCount(): Int {

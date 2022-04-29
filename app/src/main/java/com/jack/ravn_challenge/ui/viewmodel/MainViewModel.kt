@@ -2,22 +2,30 @@ package com.jack.ravn_challenge.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.apollographql.apollo3.exception.ApolloException
-import com.jack.ravn_challenge.core.GraphQLInstance
 import com.jack.ravn_challenge.data.model.AllPeople
 import com.jack.ravn_challenge.data.model.PersonModel
+import com.jack.ravn_challenge.domain.usecase.GetFavoritePersonUseCase
 import com.jack.ravn_challenge.domain.usecase.GetPeopleUseCase
 import com.jack.ravn_challenge.domain.usecase.GetPersonUseCase
+import com.jack.ravn_challenge.domain.usecase.SetFavoritePersonUseCase
 import com.jack.ravn_challenge.vo.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
+import javax.inject.Inject
 
-class MainViewModel:ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    var getPeopleUseCase: GetPeopleUseCase,
+    var getPersonUseCase: GetPersonUseCase,
+    val setFavoritePerson: SetFavoritePersonUseCase,
+    val getFavoritePeople: GetFavoritePersonUseCase
+) :ViewModel() {
 
     val peopleModel = MutableLiveData<Resource<AllPeople?>>()
     val personModel = MutableLiveData<Resource<PersonModel>>()
 
-    var getPeopleUseCase = GetPeopleUseCase()
-
-    var getPersonUseCase = GetPersonUseCase()
 
     fun getAllPeople(cursor:String, count:Int) {
 
@@ -57,8 +65,20 @@ class MainViewModel:ViewModel() {
         }
     }
 
+    fun saveFavoritePerson(personModel: PersonModel) {
+        viewModelScope.launch {
+            setFavoritePerson(personModel)
+        }
+    }
 
-    val apolloClient = GraphQLInstance.get()
+    fun favoritePeople()= liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
+        emit(Resource.Loading)
+        try {
+            emit(Resource.Success(getFavoritePeople()))
+        }catch (e:Exception){
+            emit(Resource.Failure(e))
+        }
+    }
 
     //val fetchPeopleList = peopleData.
 

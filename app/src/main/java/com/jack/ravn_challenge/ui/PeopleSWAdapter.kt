@@ -4,10 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
-import android.widget.AdapterView
 import androidx.recyclerview.widget.RecyclerView
-import com.jack.ravn_challenge.GetAllPeopleQuery
 import com.jack.ravn_challenge.R
 import com.jack.ravn_challenge.data.model.PersonModel
 import com.jack.ravn_challenge.databinding.ItemPeopleBinding
@@ -41,8 +38,8 @@ class PeopleSWAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = peopleList[position]
         holder.binding.peopleName.text = person.name
-        val species:String? = person.species?.name
-        val homeworl:String = person.homeworld?.name!!
+        val species:String? = person.species?.nameSM
+        val homeworl:String = person.homeworld?.nameHM!!
         if (species==null){
             holder.binding.species.text = "Human from $homeworl"
         }else{

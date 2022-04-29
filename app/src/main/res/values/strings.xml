@@ -13,4 +13,7 @@
     <string name="skin_color">Skin Color</string>
     <string name="birth_year">Birth Year</string>
     <string name="vehicle">Vehicle</string>
+    <string name="btn_favorite">Add Favorite</string>
+    <string name="favorite_person">Person Favorite</string>
+    <string name="favorite_person_detail">Detail</string>
 </resources>
